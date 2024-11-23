@@ -4,15 +4,15 @@ function Systems() {
     const [activeListItem, setActiveListItem] = useState(null);
     const [activeSystemItem, setActiveSystemItem] = useState(null);
 
-    const listButtons = ["List 1", "List 2", "List 3", "List 4", "List 5"];
-    const systemButtons = ["System 1", "System 2", "System 3", "System 4", "System 5"];
+    const listButtons = ["Service 1", "Service 2", "Service 3", "Service 4", "Service 5"];
+    const systemButtons = ["Device 1", "Device 2", "Device 3", "Device 4", "Device 5"];
 
     const applicationsPlaceholder = {
-        "List 1": [
+        "Service 1": [
             { name: "Application A", affected: true, count: 3 },
             { name: "Application B", affected: false },
         ],
-        "List 2": [
+        "Service 2": [
             { name: "Application C", affected: true, count: 5 },
             { name: "Application D", affected: false },
         ],
@@ -20,10 +20,10 @@ function Systems() {
     };
 
     const systemDetailsPlaceholder = {
-        "System 1": [
+        "Device 1": [
             { id: 1, type: "Type A", location: "Location A", ip: "192.0.2.1", serviceApp: "App A" },
         ],
-        "System 2": [
+        "Device 2": [
             { id: 2, type: "Type B", location: "Location B", ip: "192.0.2.2", serviceApp: "App B" },
         ],
         // Add more placeholders for "System 3", etc.
