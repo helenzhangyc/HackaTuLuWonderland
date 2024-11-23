@@ -3,9 +3,9 @@ import { ReactComponent as ServicesIcon } from '../icons/services.svg';
 import { ReactComponent as NetworksIcon } from '../icons/networks.svg';
 import { ReactComponent as InsightsIcon } from '../icons/insights.svg';
 import { ReactComponent as ApplicationsIcon } from '../icons/applications.svg';
-import jsondata from '../jsons/test.json';
 
-function Insights() {
+function Insights(jsondata) {
+
     // need to retrieve the values from db later
     const data = [
       {label: "System with Vulnerability", value: jsondata.directAffectedSystemsCount, icon: <InfectedIcon className="h-6 w-6 text-red-500" />},

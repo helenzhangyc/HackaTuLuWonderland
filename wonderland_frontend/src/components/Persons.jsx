@@ -2,10 +2,9 @@ import { ReactComponent as PersonsIcon } from '../icons/persons.svg';
 import { ReactComponent as OtherIcon } from '../icons/other.svg';
 import { ReactComponent as PeopleIcon } from '../icons/people.svg';
 import { ReactComponent as HouseIcon } from '../icons/house.svg';
-import jsondata from '../jsons/test.json';
 import { Fragment, React } from 'react';
 
-function Persons() {
+function Persons(jsondata) {
     const data = [
       { label: "IT Responsibles\nIT Admins & Security Coordinator", value: jsondata.directAffectedITResponsibles },
       { label: "Users", value: jsondata.directAffectedUsers },
