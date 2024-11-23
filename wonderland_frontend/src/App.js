@@ -8,6 +8,7 @@ import ITContactPeople from "./components/ITContactPeople";
 import OrganizationUnits from "./components/OrganizationUnits";
 import Systems from "./components/Systems";
 import SuggestedSolution from "./components/SuggestedSolution";
+import DataVisualizations from "./components/DataVisualizations";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           />
           <Route path="/systems" element={<WithBackButton component={Systems} />} />
           <Route path="/suggested-solution" element={<SuggestedSolution />} />
+          <Route path="/data-visualizations" element={<DataVisualizations />} />
         </Routes>
       </div>
     </Router>
@@ -40,12 +42,20 @@ function Dashboard() {
     <div>
       <div className="flex justify-between items-center">
         <h2 className="text-4xl font-extrabold dark:text-white">Dashboard</h2>
-        <button
-          onClick={() => navigate("/suggested-solution")}
-          className="px-4 py-2 bg-teal-500 text-white rounded shadow hover:bg-teal-600"
-        >
-          Suggested Solution
-        </button>
+        <div className="flex space-x-4">
+          <button
+            onClick={() => navigate("/data-visualizations")}
+            className="px-4 py-2 bg-indigo-500 text-white rounded shadow hover:bg-indigo-600"
+          >
+            Data Visualization
+          </button>
+          <button
+            onClick={() => navigate("/suggested-solution")}
+            className="px-4 py-2 bg-teal-500 text-white rounded shadow hover:bg-teal-600"
+          >
+            Suggested Solution
+          </button>
+        </div>
       </div>
       <div className="flex justify-between space-x-4 mt-8">
         <button
