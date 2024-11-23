@@ -18,7 +18,7 @@ si.version <= "4.34.2"
 )
 RETURN sys;
 
-// Involved AssignedSystemRole with the systems
+// Involved AssignedSystemRole with the systems (wrong direction)
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
@@ -39,7 +39,7 @@ si.version <= "4.34.2"
 MATCH (role:AssignedSystemRole)-[:assigned_for]-(sys)
 RETURN DISTINCT role;
 
-// Involved ServiceProvider with the system
+// Involved ServiceProvider with the system (wrong direction)
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
@@ -60,7 +60,7 @@ si.version <= "4.34.2"
 MATCH (serPro:ServiceProvider)-[:provides_service]-(sys)
 RETURN serPro;
 
-// Organisation of the involved person (system → application → OrgUnit)
+// Organisation of the involved person (System -> IPAddress -> VirtualNetworkSegment -> OrgUnit)
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
@@ -103,7 +103,7 @@ MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)-[:in_segment]-(vns:VirtualNetwor
 MATCH (p:Person)-[:head_of]-(org)
 RETURN count( DISTINCT p);
 
-// Application
+// Application (wrong direction)
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
@@ -139,7 +139,7 @@ si.version <= "4.34.2"
 MATCH (sys)-[:in_country]-(ctry:Country)
 RETURN DISTINCT ctry;
 
-// Person involved with the involved AssignedsystemRole
+// Person involved with the involved AssignedsystemRole (wrong direction)
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
