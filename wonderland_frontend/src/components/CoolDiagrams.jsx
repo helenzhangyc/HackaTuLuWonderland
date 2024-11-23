@@ -1,6 +1,5 @@
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { ReactComponent as CoolDiagramsIcon } from '../icons/cool_diagrams.svg';
-import { useState, useEffect } from "react";
 import jsondata from '../jsons/test.json';
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
