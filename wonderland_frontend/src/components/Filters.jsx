@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { SVGProps } from 'react';
+import { ReactComponent as FilterIcon } from '../icons/filters.svg';
 
-function Filters(props) {
+function Filters() {
   // Dropdown values (getting from database later)
   const dropdownValues = ['Option 1', 'Option 2', 'Option 3', 'Option 4'];
 
@@ -27,7 +27,7 @@ function Filters(props) {
     style={{ 
         justifyContent: 'center',
         alignItems: 'center',
-         width: '300px' }}>
+         width: '350px' }}>
       <label htmlFor={key}>{label}</label>
       <select
       class="block w-full px-4 py-3 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -51,18 +51,22 @@ function Filters(props) {
 
 
     return (
+      <div>
+      <div className="flex items-center space-x-2">
+  <FilterIcon className="h-6 w-6 text-gray-500" />
+  <div><b>Filters</b></div>
+</div>
+<br/>
       <div className="flex gap-4 mb-8">
         
         <div class="relative inline-block text-left" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', gap: '20px', marginBottom: '20px' }}>
         
-        <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="4em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4h16v2.172a2 2 0 0 1-.586 1.414L15 12v7l-6 2v-8.5L4.52 7.572A2 2 0 0 1 4 6.227z"></path></svg>
-        <div style={{textAlign: "left", marginRight: "50px"}}>
-  <b>Filters</b>
-</div>
+        
       {['Software Installation', 'Type', 'Organization Units', 'Services'].map((label, index) =>
         renderDropdown(label, `dropdown${index + 1}`)
       )}
     </div>
+      </div>
       </div>
     );
   }

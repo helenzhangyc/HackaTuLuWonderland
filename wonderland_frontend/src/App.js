@@ -8,7 +8,7 @@ function App() {
     <div className="p-8">
       <h2 class="text-4xl font-extrabold dark:text-white">Dashboard</h2>
       <br />
-      <Filters icon="tabler:filter" />
+      <Filters />
       <Insights />
       <CoolDiagrams />
       <Persons />

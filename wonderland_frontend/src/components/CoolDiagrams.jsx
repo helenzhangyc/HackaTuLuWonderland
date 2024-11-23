@@ -1,5 +1,6 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import { ReactComponent as CoolDiagramsIcon } from '../icons/cool_diagrams.svg';
 
 const data = [
   { name: "Apple", value: 25 },
