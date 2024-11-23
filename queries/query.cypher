@@ -103,7 +103,7 @@ MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)-[:in_segment]-(vns:VirtualNetwor
 MATCH (p:Person)-[:head_of]-(org)
 RETURN count( DISTINCT p);
 
-// Application (wrong direction)
+// Application (wrong direction, but makes sense)
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
