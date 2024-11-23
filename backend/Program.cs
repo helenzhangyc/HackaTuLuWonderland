@@ -19,7 +19,7 @@ app.MapGet("/dashboard-stats", async (NeoClient client) =>
 {
     var stats = new DashboardStatsDto();
     stats.DirectAffectedSystemsCount = await client.GetDirectAffectedSystemsCount();
-    stats.DirectAffectedApplications = await client.GetDirectAffectedApplications;
+    stats.DirectAffectedApplicationsCount = await client.GetDirectAffectedApplicationsCount();
     stats.DirectAffectedServicesCount = await client.GetDirectAffectedServicesCount();
     stats.DirectAffectedNetworksCount = await client.GetDirectAffectedNetworksCount();
     
@@ -41,7 +41,7 @@ app.MapGet("/dashboard-stats", async (NeoClient client) =>
     stats.IndirectApplicationCountThroughService = await client.GetIndirectApplicationCountThroughService();
 
     stats.AffectedITAdminCount = await client.GetAffectedITAdminCount();
-    stats.IndirectAffectedSystemCountThroughITAdmin = await client.IndirectAffectedSystemCountThroughITAdmin();
+    stats.IndirectAffectedSystemCountThroughITAdmin = await client.GetIndirectAffectedSystemCountThroughITAdmin();
 
     return stats;
 })

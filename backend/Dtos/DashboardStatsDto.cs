@@ -2,7 +2,7 @@ namespace HackaTuLuWonderland.Persistence;
 
 public class DashboardStatsDto {
     public int DirectAffectedSystemsCount { get; set; }
-    public int DirectAffectedApplications { get; set; }
+    public int DirectAffectedApplicationsCount { get; set; }
     public int DirectAffectedServicesCount { get; set; }
     public int DirectAffectedNetworksCount { get; set; }
     

@@ -50,8 +50,26 @@ public class NeoClient {
                 return count;
             });
     }
+    public async Task<int> GetDirectAffectedApplicationsCount(){
+        await using var session = _driver.AsyncSession();
 
-    public async Task<int> GetAffectedServicesCount(){
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (app:Application)-[:runs_on]-(sys)
+                RETURN COUNT(distinct app);");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
+
+    public async Task<int> GetDirectAffectedServicesCount(){
         await using var session = _driver.AsyncSession();
 
         return await session.ExecuteWriteAsync(
@@ -71,7 +89,7 @@ public class NeoClient {
             });
     }
 
-    public async Task<int> GetAffectedNetworksCount(){
+    public async Task<int> GetDirectAffectedNetworksCount(){
         await using var session = _driver.AsyncSession();
 
         return await session.ExecuteWriteAsync(
@@ -90,126 +108,7 @@ public class NeoClient {
             });
     }
 
-    public async Task<int> GetAffectedServiceOwnersCount(){
-        await using var session = _driver.AsyncSession();
-
-        return await session.ExecuteWriteAsync(
-            async tx =>
-            {
-                var result = await tx.RunAsync(
-                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
-                WHERE" + docker_filter +
-                @"MATCH (app:Application)-[:runs_on]-(sys)
-                MATCH (app)-[:serves] - (ser:Service)
-                MATCH (p)-[:role_assigned]-(aSerRole:AssignedServiceRole)-[:assigned_for]-(ser)
-                RETURN COUNT(distinct p.fullname);");
-
-                var record = await result.SingleAsync();
-                var count = record[0].As<int>();
-
-                return count;
-            });
-    }
     
-    public async Task<int> GetAffectedITResponsibles(){
-        await using var session = _driver.AsyncSession();
-
-        return await session.ExecuteWriteAsync(
-            async tx =>
-            {
-                var result = await tx.RunAsync(
-                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
-                WHERE" + docker_filter +
-                @"MATCH (asrole:AssignedSystemRole)-[:assigned_for]-(sys) where asrole.label = ""System Administrator"" or asrole.label = ""Security Coordinator"" or asrole.label = ""Cybersecurity Officer""
-                MATCH (p:Person)-[:role_assigned]-(asrole) 
-                RETURN count(distinct p.fullname);");
-
-                var record = await result.SingleAsync();
-                var count = record[0].As<int>();
-
-                return count;
-            });
-    }
-        
-    public async Task<int> GetAffectedUsersCount(){
-        await using var session = _driver.AsyncSession();
-
-        return await session.ExecuteWriteAsync(
-            async tx =>
-            {
-                var result = await tx.RunAsync(
-                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
-                WHERE" + docker_filter +
-                @"MATCH (p:Person) - [:role_assigned] - (aSysRole:AssignedSystemRole) - [:assigned_for] - (sys)
-                RETURN count(distinct p);");
-
-                var record = await result.SingleAsync();
-                var count = record[0].As<int>();
-
-                return count;
-            });
-    }
-
-            
-    public async Task<int> GetAffectedOUsCount(){
-        await using var session = _driver.AsyncSession();
-
-        return await session.ExecuteWriteAsync(
-            async tx =>
-            {
-                var result = await tx.RunAsync(
-                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
-                WHERE" + docker_filter +
-                @"MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)-[:in_segment]-(vns:VirtualNetworkSegment)-[:owned_by]-(org:OrgUnit)
-                RETURN count( DISTINCT org);");
-
-                var record = await result.SingleAsync();
-                var count = record[0].As<int>();
-
-                return count;
-            });
-    }
-
-            
-    public async Task<int> GetAffectedCountriesCount(){
-        await using var session = _driver.AsyncSession();
-
-        return await session.ExecuteWriteAsync(
-            async tx =>
-            {
-                var result = await tx.RunAsync(
-                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
-                WHERE" + docker_filter +
-                @"MATCH (sys)-[:in_country]-(ctry:Country)
-                RETURN count(DISTINCT ctry);");
-
-                var record = await result.SingleAsync();
-                var count = record[0].As<int>();
-
-                return count;
-            });
-    }
-
-            
-    public async Task<int> GetAffectedLocationsCount(){
-        await using var session = _driver.AsyncSession();
-
-        return await session.ExecuteWriteAsync(
-            async tx =>
-            {
-                var result = await tx.RunAsync(
-                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
-                WHERE" + docker_filter +
-                @"MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)-[:in_segment]-(VNS:VirtualNetworkSegment)-[:at_location]-(loc:Location)
-                RETURN count(DISTINCT loc);");
-
-                var record = await result.SingleAsync();
-                var count = record[0].As<int>();
-
-                return count;
-            });
-    }
-
     public async Task<Dictionary<string, int>> GetSystemsCountPerCriticalAndConsistency(){
         await using var session = _driver.AsyncSession();
 
@@ -296,6 +195,177 @@ public class NeoClient {
                 return dict;
             });
     }
+
+    public async Task<Dictionary<string, int>> GetSystemCountPerNetworkStatus(){
+        await using var session = _driver.AsyncSession();
+        var offlinesystems = await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"WITH COLLECT(DISTINCT sys) AS allSystems
+
+                // Second query: Systems matching software criteria and having related IP addresses
+                MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE " + docker_filter +
+                @"MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)
+                WITH allSystems, COLLECT(DISTINCT sys) AS systemsWithIP
+
+                // Compute relative complement: Systems without related IPs
+                WITH [sys IN allSystems WHERE NOT sys IN systemsWithIP] AS complementSystems
+                UNWIND complementSystems AS sys
+                RETURN COUNT(DISTINCT sys)");
+
+                var dict = new Dictionary<string, int>();
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+
+        var onlinesystems = await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (sys) -[:related_ipaddress] - (ip:IPAddress)
+                RETURN count( DISTINCT sys)");
+
+                var dict = new Dictionary<string, int>();
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+
+        return new Dictionary<string, int>{
+            { "Offline Systems", offlinesystems},
+            { "Online Systems", onlinesystems}
+        };
+    }
+    
+    public async Task<int> GetDirectAffectedITResponsibles(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (asrole:AssignedSystemRole)-[:assigned_for]-(sys) where asrole.label = ""System Administrator"" or asrole.label = ""Security Coordinator"" or asrole.label = ""Cybersecurity Officer""
+                MATCH (p:Person)-[:role_assigned]-(asrole) 
+                RETURN count(distinct p.fullname);");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
+        
+    public async Task<int> GetDirectAffectedUsers(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (p:Person) - [:role_assigned] - (aSysRole:AssignedSystemRole) - [:assigned_for] - (sys)
+                RETURN count(distinct p);");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
+        
+    public async Task<int> GetDirectAffectedServiceOwners(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (app:Application)-[:runs_on]-(sys)
+                MATCH (app)-[:serves] - (ser:Service)
+                MATCH (p)-[:role_assigned]-(aSerRole:AssignedServiceRole)-[:assigned_for]-(ser)
+                RETURN COUNT(distinct p.fullname);");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
+            
+    public async Task<int> GetDirectAffectedOUs(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)-[:in_segment]-(vns:VirtualNetworkSegment)-[:owned_by]-(org:OrgUnit)
+                RETURN count( DISTINCT org);");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
+
+            
+    public async Task<int> GetDirectAffectedCountries(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (sys)-[:in_country]-(ctry:Country)
+                RETURN count(DISTINCT ctry);");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
+
+            
+    public async Task<int> GetDirectAffectedLocations(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)-[:in_segment]-(VNS:VirtualNetworkSegment)-[:at_location]-(loc:Location)
+                RETURN count(DISTINCT loc);");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
     
     public async Task<Dictionary<string, int>> GetSystemCountPerSubType(){
         await using var session = _driver.AsyncSession();
@@ -317,7 +387,50 @@ public class NeoClient {
                 return dict;
             });
     }
-    
+
+    public async Task<Dictionary<string, int>> GetDirectSystemCountPerType(){
+        await using var session = _driver.AsyncSession();
+        
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (sys) -[:related_ipaddress] - (ip:IPAddress)
+                RETURN  sys.type, count(distinct sys)");
+
+                var dict = new Dictionary<string, int>();
+
+                var record = await result.ToListAsync();
+
+                dict = record.Select(entry => KeyValuePair.Create(entry[0].As<string>(), entry[1].As<int>())).ToDictionary();
+                return dict;
+            });
+    }
+
+    public async Task<Dictionary<string, int>> GetInDirectSystemCountPerType(){
+        await using var session = _driver.AsyncSession();
+            return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (sys) -[:related_ipaddress] - (ip:IPAddress)-[:in_segment]-(vns:VirtualNetworkSegment)
+                MATCH (indirectSys:System) - [:related_ipaddress] - (ip)
+                where indirectSys <>sys
+                RETURN  indirectSys.type, count(DISTINCT indirectSys)");
+
+                var dict = new Dictionary<string, int>();
+
+                var record = await result.ToListAsync();
+
+                dict = record.Select(entry => KeyValuePair.Create(entry[0].As<string>(), entry[1].As<int>())).ToDictionary();
+                return dict;
+        });
+    }
+
     public async Task<Dictionary<string, int>> GetDirectApplicationCountPerCategory(){
         await using var session = _driver.AsyncSession();
         
@@ -413,4 +526,46 @@ public class NeoClient {
             {"Standalone App / Module", functional_module_relation + standalone_app_relation}
         };
     }
+
+    public async Task<int> GetAffectedITAdminCount(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (asrole:AssignedSystemRole)-[:assigned_for]-(sys) where asrole.label = ""System Administrator""
+                MATCH (p:Person)-[:role_assigned]-(asrole) 
+                RETURN count(distinct p.fullname);");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
+
+    public async Task<int> GetIndirectAffectedSystemCountThroughITAdmin(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"MATCH (p:Person) - [:role_assigned]-(asr:AssignedSystemRole{label:""System Administrator""}) - [:assigned_for] - (sys)
+                MATCH (p) - [:role_assigned]-(asr2:AssignedSystemRole{label:""System Administrator""}) - [:assigned_for] - (indirectSys:System)
+                where indirectSys <>sys
+                RETURN  count(DISTINCT indirectSys)");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
+    
 }
