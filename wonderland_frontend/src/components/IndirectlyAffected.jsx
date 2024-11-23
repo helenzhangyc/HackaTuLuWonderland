@@ -1,16 +1,9 @@
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { ReactComponent as HouseIcon } from '../icons/house.svg';
-import jsondata from '../jsons/test.json';
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-const directlyAffectedSystemTypes = Object.entries(jsondata.directSystemCountPerType).map(([name, value]) => ({
-  name,
-  value,
-}));
-const indirectlyAffectedSystemTypes = Object.entries(jsondata.inDirectSystemCountPerType).map(([name, value]) => ({  name, value }));
-const directlyAffectedApplicationCategory = Object.entries(jsondata.directApplicationCountPerCategory).map(([name, value]) => ({  name, value }));
-const indirectlyAffectedAppsPerService = Object.entries(jsondata.indirectApplicationCountThroughService).map(([name, value]) => ({  name, value }));
+
 
 const renderPieChart = (data) => (
   <PieChart width={400} height={400}>
@@ -33,7 +26,15 @@ const renderPieChart = (data) => (
 );
 
 
-const CoolDiagrams = () => {
+const IndirectlyAffected = (jsondata) => {
+  const directlyAffectedSystemTypes = Object.entries(jsondata.directSystemCountPerType).map(([name, value]) => ({
+    name,
+    value,
+  }));
+  const indirectlyAffectedSystemTypes = Object.entries(jsondata.inDirectSystemCountPerType).map(([name, value]) => ({  name, value }));
+  const directlyAffectedApplicationCategory = Object.entries(jsondata.directApplicationCountPerCategory).map(([name, value]) => ({  name, value }));
+  const indirectlyAffectedAppsPerService = Object.entries(jsondata.indirectApplicationCountThroughService).map(([name, value]) => ({  name, value }));
+  
     const ITAdminSystems = [
         { label: "Affected IT-Admins", value: jsondata.affectedITAdminCount, icon: <HouseIcon className="h-6 w-6 text-red-500" />},
         { label: "Indirect affected Systems", value: jsondata.indirectAffectedSystemCountThroughITAdmin, icon: <HouseIcon className="h-6 w-6 text-red-500" /> },
@@ -97,4 +98,4 @@ const CoolDiagrams = () => {
   );
 };
 
-export default CoolDiagrams;
+export default IndirectlyAffected;

@@ -10,8 +10,11 @@ import Systems from "./components/Systems";
 import SuggestedSolution from "./components/SuggestedSolution";
 import DataVisualizations from "./components/DataVisualizations";
 import IndirectlyAffected from "./components/IndirectlyAffected";
+import { useEffect, useState } from "react";
 
 function App() {
+
+
   return (
     <Router>
       <div className="p-8">
@@ -38,6 +41,26 @@ function App() {
 // Main Dashboard Component
 function Dashboard() {
   const navigate = useNavigate();
+
+  const [jsondata, setJsonData] = useState(null);
+
+  useEffect(() => {
+    // Fetch the data from the API endpoint
+    fetch('http://localhost:5033/dashboard-stats')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setJsonData(data); // Set the fetched data to state
+      })
+      .catch((error) => {
+        console.error('Error fetching the JSON data:', error);
+      });
+  }, []);
+
 
   return (
     <div>
@@ -86,10 +109,10 @@ function Dashboard() {
       </div>
       <br />
       {/* <Filters /> */}
-      <Insights />
-      <CoolDiagrams />
-      <Persons />
-      <IndirectlyAffected />
+      <Insights jsondata={jsondata} />
+      <CoolDiagrams jsondata={jsondata} />
+      <Persons jsondata={jsondata} />
+      <IndirectlyAffected jsondata={jsondata} />
     </div>
   );
 }

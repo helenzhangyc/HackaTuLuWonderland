@@ -1,15 +1,8 @@
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { ReactComponent as CoolDiagramsIcon } from '../icons/cool_diagrams.svg';
-import jsondata from '../jsons/test.json';
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-const data1 = Object.entries(jsondata.systemsCountPerCriticalAndConsistency).map(([name, value]) => ({
-  name,
-  value,
-}));
-const data2 = Object.entries(jsondata.systemCountPerType).map(([name, value]) => ({  name, value }));
-const data3 = Object.entries(jsondata.systemCountPerNetworkStatus).map(([name, value]) => ({  name, value }));
 
 const renderPieChart = (data) => (
   <PieChart width={400} height={400}>
@@ -32,7 +25,15 @@ const renderPieChart = (data) => (
 );
 
 
-const CoolDiagrams = () => {
+const CoolDiagrams = (jsondata) => {
+
+  const data1 = Object.entries(jsondata.systemsCountPerCriticalAndConsistency).map(([name, value]) => ({
+    name,
+    value,
+  }));
+  const data2 = Object.entries(jsondata.systemCountPerType).map(([name, value]) => ({  name, value }));
+  const data3 = Object.entries(jsondata.systemCountPerNetworkStatus).map(([name, value]) => ({  name, value }));
+
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex items-center space-x-2 self-start">
