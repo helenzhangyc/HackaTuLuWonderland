@@ -113,3 +113,68 @@ si.product = "Docker Desktop" AND si.version >= "4.10.1" AND si.version <= "4.34
 )
 MATCH (app:Application)-[:runs_on]-(sys)
 RETURN DISTINCT app;
+
+// Involved Country with the systems
+MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+WHERE
+(
+si.product = "Docker" AND
+si.version >= "23.0" AND
+si.version <= "26.1.3"
+) OR
+(
+si.product = "Docker CLI" AND
+si.version >= "23.0" AND
+si.version <= "26.1.3"
+) OR
+(
+si.product = "Docker Desktop" AND
+si.version >= "4.10.1" AND
+si.version <= "4.34.2"
+)
+MATCH (sys)-[:in_country]-(ctry:Country)
+RETURN DISTINCT ctry;
+
+// Person involved with the involved AssignedsystemRole
+MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+WHERE
+(
+si.product = "Docker" AND
+si.version >= "23.0" AND
+si.version <= "26.1.3"
+) OR
+(
+si.product = "Docker CLI" AND
+si.version >= "23.0" AND
+si.version <= "26.1.3"
+) OR
+(
+si.product = "Docker Desktop" AND
+si.version >= "4.10.1" AND
+si.version <= "4.34.2"
+)
+MATCH (asrole:AssignedSystemRole)-[:assigned_for]-(sys)
+MATCH (p:Person)-[:role_assigned]-(asrole)
+RETURN DISTINCT p;
+
+// Location
+MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+WHERE
+(
+si.product = "Docker" AND
+si.version >= "23.0" AND
+si.version <= "26.1.3"
+) OR
+(
+si.product = "Docker CLI" AND
+si.version >= "23.0" AND
+si.version <= "26.1.3"
+) OR
+(
+si.product = "Docker Desktop" AND
+si.version >= "4.10.1" AND
+si.version <= "4.34.2"
+)
+MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)-[:in_segment]-(VNS:VirtualNetworkSegment)-[:at_location]-(loc:Location)
+
+RETURN DISTINCT loc;
