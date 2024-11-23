@@ -57,7 +57,7 @@ const CoolDiagrams = () => {
           <div className="flex">
             {renderPieChart(data1)}
           </div>
-          <p style={{ marginTop: '-30px', fontSize: '20px' }}>OS</p>
+          <p style={{ marginTop: '-30px', fontSize: '20px' }}>Critical</p>
         </div>
         <div className="flex flex-col items-center">
           <div className="flex">
@@ -69,7 +69,7 @@ const CoolDiagrams = () => {
           <div className="flex">
             {renderPieChart(data3)}
           </div>
-          <p style={{ marginTop: '-30px', fontSize: '20px' }}>Software Installations</p>
+          <p style={{ marginTop: '-30px', fontSize: '20px' }}>Subtype</p>
         </div>
       </div>
     </div>
