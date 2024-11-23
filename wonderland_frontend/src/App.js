@@ -7,6 +7,7 @@ import Services from "./components/Services";
 import ITContactPeople from "./components/ITContactPeople";
 import OrganizationUnits from "./components/OrganizationUnits";
 import Systems from "./components/Systems";
+import SuggestedSolution from "./components/SuggestedSolution";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             element={<WithBackButton component={OrganizationUnits} />}
           />
           <Route path="/systems" element={<WithBackButton component={Systems} />} />
+          <Route path="/suggested-solution" element={<SuggestedSolution />} />
         </Routes>
       </div>
     </Router>
@@ -36,7 +38,15 @@ function Dashboard() {
 
   return (
     <div>
-      <h2 className="text-4xl font-extrabold dark:text-white">Dashboard</h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-4xl font-extrabold dark:text-white">Dashboard</h2>
+        <button
+          onClick={() => navigate("/suggested-solution")}
+          className="px-4 py-2 bg-teal-500 text-white rounded shadow hover:bg-teal-600"
+        >
+          Suggested Solution
+        </button>
+      </div>
       <div className="flex justify-between space-x-4 mt-8">
         <button
           onClick={() => navigate("/services")}
