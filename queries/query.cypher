@@ -1,4 +1,5 @@
 // Systems that are affected by docker vulnerabilities through SoftwareInstallation
+// attributes: critical, state, provider_name, type?  (server / type / unknown)
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
@@ -19,6 +20,7 @@ si.version <= "4.34.2"
 RETURN sys;
 
 // Involved AssignedSystemRole with the systems (wrong direction)
+// attributes: label
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
@@ -40,6 +42,7 @@ MATCH (role:AssignedSystemRole)-[:assigned_for]-(sys)
 RETURN DISTINCT role;
 
 // Involved ServiceProvider with the system (wrong direction)
+// attributes: name
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
@@ -104,6 +107,7 @@ MATCH (p:Person)-[:head_of]-(org)
 RETURN count( DISTINCT p);
 
 // Application (wrong direction, but makes sense)
+// attributes: name, category
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
@@ -119,6 +123,7 @@ MATCH (app:Application)-[:runs_on]-(sys)
 RETURN DISTINCT app;
 
 // Involved Country with the systems
+// attributes: name or cc 
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
@@ -140,6 +145,7 @@ MATCH (sys)-[:in_country]-(ctry:Country)
 RETURN DISTINCT ctry;
 
 // Person involved with the involved AssignedsystemRole (wrong direction)
+// attributes: gid, fullname
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
@@ -162,6 +168,7 @@ MATCH (p:Person)-[:role_assigned]-(asrole)
 RETURN DISTINCT p;
 
 // Location
+// attributes: name
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
