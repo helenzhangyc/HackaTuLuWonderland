@@ -9,9 +9,7 @@ const data1 = Object.entries(jsondata.systemsCountPerCriticalAndConsistency).map
   value,
 }));
 const data2 = Object.entries(jsondata.systemCountPerType).map(([name, value]) => ({  name, value }));
-const data3 = Object.entries(jsondata.systemCountPerSubType).map(([name, value]) => ({  name, value }));
-
-console.log(data1);
+const data3 = Object.entries(jsondata.systemCountPerNetworkStatus).map(([name, value]) => ({  name, value }));
 
 const renderPieChart = (data) => (
   <PieChart width={400} height={400}>
@@ -58,7 +56,7 @@ const CoolDiagrams = () => {
           <div className="flex">
             {renderPieChart(data3)}
           </div>
-          <p style={{ marginTop: '-30px', fontSize: '20px' }}>Subtype</p>
+          <p style={{ marginTop: '-30px', fontSize: '20px' }}>Network Status</p>
         </div>
       </div>
     </div>
