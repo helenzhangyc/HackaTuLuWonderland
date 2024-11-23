@@ -16,7 +16,6 @@ function Services() {
             { name: "Application C", affected: true, count: 5 },
             { name: "Application D", affected: false },
         ],
-        // Add more placeholders for "List 3", etc.
     };
 
     const systemDetailsPlaceholder = {
@@ -26,8 +25,8 @@ function Services() {
         "Device 2": [
             { id: 2, type: "Type B", location: "Location B", ip: "192.0.2.2", serviceApp: "App B" },
         ],
-        // Add more placeholders for "System 3", etc.
     };
+
 
     const renderApplications = () => {
         const data = applicationsPlaceholder[activeListItem] || [];
@@ -68,45 +67,44 @@ function Services() {
 
     return (
         <div>
-            <h3 className="text-2xl font-bold">Dashboard &gt; Systems</h3>
-            <div className="grid grid-cols-2 gap-8 mt-4">
+            <h3 className="text-2xl font-bold">Dashboard &gt; Services</h3>
+            <div className="grid grid-cols-1 gap-8 mt-4">
+
                 {/* List Section */}
-                <div className="p-4 border rounded shadow">
-                    <h4 className="text-xl font-bold mb-2">List</h4>
-                    <div>
+                <div className="flex border rounded shadow">
+                    <div className="w-1/3 p-4 border-r">
+                        <h4 className="text-xl font-bold mb-2">Services</h4>
                         {listButtons.map((item, index) => (
                             <button
                                 key={index}
                                 onClick={() => setActiveListItem(item)}
-                                className={`block w-full p-2 mb-2 rounded ${activeListItem === item ? "bg-blue-300" : "bg-gray-100"
-                                    }`}
+                                className={`block w-full p-2 mb-2 rounded ${activeListItem === item ? "bg-blue-300" : "bg-gray-100"}`}
                             >
                                 {item}
                             </button>
                         ))}
                     </div>
-                    <div className="mt-4">
+                    <div className="w-2/3 p-4">
                         <h5 className="text-lg font-bold">Applications</h5>
                         {activeListItem ? renderApplications() : <p>Select a List to view applications.</p>}
                     </div>
                 </div>
 
                 {/* Systems Section */}
-                <div className="p-4 border rounded shadow">
-                    <h4 className="text-xl font-bold mb-2">Systems</h4>
-                    <div>
+                <div className="flex border rounded shadow">
+                    <div className="w-1/3 p-4 border-r">
+                        <h4 className="text-xl font-bold mb-2">Devices</h4>
                         {systemButtons.map((item, index) => (
                             <button
                                 key={index}
                                 onClick={() => setActiveSystemItem(item)}
-                                className={`block w-full p-2 mb-2 rounded ${activeSystemItem === item ? "bg-blue-300" : "bg-gray-100"
-                                    }`}
+                                className={`block w-full p-2 mb-2 rounded ${activeSystemItem === item ? "bg-blue-300" : "bg-gray-100"}`}
                             >
                                 {item}
                             </button>
                         ))}
                     </div>
-                    <div className="mt-4">
+                    <div className="w-2/3 p-4">
                         <h5 className="text-lg font-bold">System Details</h5>
                         {activeSystemItem ? renderSystemDetails() : <p>Select a System to view details.</p>}
                     </div>
