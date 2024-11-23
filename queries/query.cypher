@@ -182,3 +182,25 @@ si.version <= "4.34.2"
 MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)-[:in_segment]-(VNS:VirtualNetworkSegment)-[:at_location]-(loc:Location)
 
 RETURN DISTINCT loc;
+
+
+// All the people related to the volurable systems
+MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+WHERE
+(
+si.product = "Docker" AND
+si.version >= "23.0" AND
+si.version <= "26.1.3"
+) OR
+(
+si.product = "Docker CLI" AND
+si.version >= "23.0" AND
+si.version <= "26.1.3"
+) OR
+(
+si.product = "Docker Desktop" AND
+si.version >= "4.10.1" AND
+si.version <= "4.34.2"
+)
+MATCH (p:Person) - [:role_assigned] - (role:AssignedSystemRole) - [:assigned_for] - (sys)
+RETURN p.fullname, role.label;
