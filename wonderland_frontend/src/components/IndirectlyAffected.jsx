@@ -37,7 +37,8 @@ const CoolDiagrams = () => {
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="flex items-center space-x-2 self-start">
-        <div>Indirectly Affected (Online Devices)</div>
+        <div className="text-3xl font-bold">Indirectly Affected (Online Devices)</div>
+        <br/>
         <b>Systems affected through network</b>
       </div>
       <div className="flex space-x-4">
