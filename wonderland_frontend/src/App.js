@@ -6,16 +6,15 @@ import Persons from "./components/Persons";
 function App() {
   return (
     <div className="p-8">
-      <h2 class="text-4xl font-extrabold dark:text-white">Dashboard</h2>
+      <h2 className="text-4xl font-extrabold dark:text-white">Dashboard</h2>
       <br />
       <Filters />
       <Insights />
+      <br />
       <CoolDiagrams />
       <Persons />
-    </div >
+    </div>
   );
 }
 
 export default App;
-
-
