@@ -9,7 +9,7 @@ import OrganizationUnits from "./components/OrganizationUnits";
 import Systems from "./components/Systems";
 import SuggestedSolution from "./components/SuggestedSolution";
 import DataVisualizations from "./components/DataVisualizations";
-import data from './jsons/test.json';
+import IndirectlyAffected from "./components/IndirectlyAffected";
 
 function App() {
   return (
@@ -85,10 +85,11 @@ function Dashboard() {
         </button>
       </div>
       <br />
-      <Filters />
+      {/* <Filters /> */}
       <Insights />
       <CoolDiagrams />
       <Persons />
+      <IndirectlyAffected />
     </div>
   );
 }

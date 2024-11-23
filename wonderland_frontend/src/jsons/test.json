@@ -1,28 +1,29 @@
 {
-  "affectedSystemsCount": 202,
-  "affectedServicesCount": 5,
-  "affectedNetworksCount": 52,
-  "affectedITAdmins": -1,
-  "affectedUsers": 313,
-  "affectedServiceOwners": 7,
-  "affectedOUs": 10,
-  "affectedCountries": 10,
-  "affectedLocations": 23,
-  "systemCountPerType": {
-    "Server": 104,
-    "Unknown": 88,
-    "Client": 10
+  "directAffectedSystemsCount": 0,
+  "directAffectedApplicationsCount": 0,
+  "directAffectedServicesCount": 0,
+  "directAffectedNetworksCount": 0,
+  "systemsCountPerCriticalAndConsistency": {},
+  "systemCountPerType": {},
+  "systemCountPerNetworkStatus": {},
+  "directAffectedITResponsibles": 0,
+  "directAffectedUsers": 0,
+  "directAffectedServiceOwners": 0,
+  "directAffectedOUs": 0,
+  "directAffectedCountries": 0,
+  "directAffectedLocations": 0,
+  "directSystemCountPerType": {},
+  "inDirectSystemCountPerType": {},
+  "directApplicationCountPerCategory": {
+    "Application (Standalone)": 51,
+    "Technology Platform": 6,
+    "Application (built on a Platform)": 2,
+    "Functional Module (as part of a Standalone Application)": 1
   },
-  "systemCountPerSubType": {
-    "Other": 149,
-    "Virtual Server": 42,
-    "Computer Device": 10,
-    "log. Server": 1
+  "indirectApplicationCountThroughService": {
+    "App / Plattform": 0,
+    "Standalone App / Module": 0
   },
-  "systemsCountPerCriticalAndConsistency": {
-    "Critical & Active": 100,
-    "Critical & InConsistent": 5,
-    "UnCritical & Active": 88,
-    "UnCritical & InConsistent": 9
-  }
+  "affectedITAdminCount": 0,
+  "indirectAffectedSystemCountThroughITAdmin": 0
 }

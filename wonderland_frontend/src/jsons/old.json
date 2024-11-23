@@ -1,0 +1,28 @@
+{
+  "affectedSystemsCount": 202,
+  "affectedServicesCount": 5,
+  "affectedNetworksCount": 52,
+  "affectedITAdmins": -1,
+  "affectedUsers": 313,
+  "affectedServiceOwners": 7,
+  "affectedOUs": 10,
+  "affectedCountries": 10,
+  "affectedLocations": 23,
+  "systemCountPerType": {
+    "Server": 104,
+    "Unknown": 88,
+    "Client": 10
+  },
+  "systemCountPerSubType": {
+    "Other": 149,
+    "Virtual Server": 42,
+    "Computer Device": 10,
+    "log. Server": 1
+  },
+  "systemsCountPerCriticalAndConsistency": {
+    "Critical & Active": 100,
+    "Critical & InConsistent": 5,
+    "UnCritical & Active": 88,
+    "UnCritical & InConsistent": 9
+  }
+}
