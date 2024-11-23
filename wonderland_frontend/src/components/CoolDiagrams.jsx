@@ -44,6 +44,7 @@ const renderPieChart = (data) => (
   </PieChart>
 );
 
+
 const CoolDiagrams = () => {
   return (
     <div className="flex flex-col items-center justify-center">
@@ -52,9 +53,24 @@ const CoolDiagrams = () => {
         <b>Cool Diagrams</b>
       </div>
       <div className="flex space-x-4">
-        {renderPieChart(data1)}
-        {renderPieChart(data2)}
-        {renderPieChart(data3)}
+        <div className="flex flex-col items-center">
+          <div className="flex">
+            {renderPieChart(data1)}
+          </div>
+          <p style={{ marginTop: '-30px', fontSize: '20px' }}>OS</p>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="flex">
+            {renderPieChart(data2)}
+          </div>
+          <p style={{ marginTop: '-30px', fontSize: '20px' }}>Type</p>
+        </div>
+        <div className="flex flex-col items-center">
+          <div className="flex">
+            {renderPieChart(data3)}
+          </div>
+          <p style={{ marginTop: '-30px', fontSize: '20px' }}>Software Installations</p>
+        </div>
       </div>
     </div>
   );

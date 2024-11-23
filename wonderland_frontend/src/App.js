@@ -12,6 +12,7 @@ function App() {
       <Insights />
       <br />
       <CoolDiagrams />
+      <br />
       <Persons />
     </div>
   );
