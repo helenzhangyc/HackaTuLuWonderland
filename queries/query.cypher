@@ -78,26 +78,30 @@ si.product = "Docker Desktop" AND
 si.version >= "4.10.1" AND
 si.version <= "4.34.2"
 )
-MATCH (app:Application)-[:runs_on]-(sys)
-MATCH (app)-[:owned_by]-(org:OrgUnit)
-RETURN DISTINCT org;
+MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)-[:in_segment]-(vns:VirtualNetworkSegment)-[:owned_by]-(org:OrgUnit)
+RETURN count( DISTINCT org);
 
 // heads of the involved organisations
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
 WHERE
 (
-si.product = "Docker" AND si.version >= "23.0" AND si.version <= "26.1.3"
+si.product = "Docker" AND
+si.version >= "23.0" AND
+si.version <= "26.1.3"
 ) OR
 (
-si.product = "Docker CLI" AND si.version >= "23.0" AND si.version <= "26.1.3"
+si.product = "Docker CLI" AND
+si.version >= "23.0" AND
+si.version <= "26.1.3"
 ) OR
 (
-si.product = "Docker Desktop" AND si.version >= "4.10.1" AND si.version <= "4.34.2"
+si.product = "Docker Desktop" AND
+si.version >= "4.10.1" AND
+si.version <= "4.34.2"
 )
-MATCH (app:Application)-[:runs_on]-(sys)
-MATCH (app)-[:owned_by]-(org:OrgUnit)
-MATCH (p:Person) - [:head_of] - (org)
-RETURN DISTINCT p;
+MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)-[:in_segment]-(vns:VirtualNetworkSegment)-[:owned_by]-(org:OrgUnit)
+MATCH (p:Person)-[:head_of]-(org)
+RETURN count( DISTINCT p);
 
 // Application
 MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
