@@ -1,18 +1,19 @@
 import { ReactComponent as PersonsIcon } from '../icons/persons.svg';
 import { ReactComponent as OtherIcon } from '../icons/other.svg';
+import jsondata from '../jsons/test.json';
 
 function Persons() {
     const data = [
-      { label: "IT Admins", value: 500 },
-      { label: "Users", value: 5000 },
-      { label: "Head of involved OU", value: 40 },
-      { label: "Service Owners", value: 11 },
+      { label: "IT Admins", value: jsondata.affectedITAdmins },
+      { label: "Users", value: jsondata.affectedUsers },
+      { label: "Head of involved OU", value: jsondata.affectedOUs },
+      { label: "Service Owners", value: jsondata.affectedServiceOwners },
     ];
   
     const locations = [
       { label: "Organisation Units", value: 8 },
-      { label: "Countries", value: 2 },
-      { label: "Locations", value: 21 },
+      { label: "Countries", value: jsondata.affectedCountries },
+      { label: "Locations", value: jsondata.affectedLocations },
     ];
   
     return (

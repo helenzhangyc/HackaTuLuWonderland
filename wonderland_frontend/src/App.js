@@ -9,6 +9,7 @@ import OrganizationUnits from "./components/OrganizationUnits";
 import Systems from "./components/Systems";
 import SuggestedSolution from "./components/SuggestedSolution";
 import DataVisualizations from "./components/DataVisualizations";
+import data from './jsons/test.json';
 
 function App() {
   return (

@@ -1,28 +1,18 @@
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import { ReactComponent as CoolDiagramsIcon } from '../icons/cool_diagrams.svg';
-
-const data1 = [
-  { name: "Apple", value: 25 },
-  { name: "Samsung", value: 40 },
-  { name: "Nokia", value: 20 },
-  { name: "Sony", value: 15 },
-];
-
-const data2 = [
-  { name: "Google", value: 30 },
-  { name: "Microsoft", value: 35 },
-  { name: "Amazon", value: 25 },
-  { name: "Facebook", value: 10 },
-];
-
-const data3 = [
-  { name: "Tesla", value: 20 },
-  { name: "Ford", value: 30 },
-  { name: "GM", value: 25 },
-  { name: "BMW", value: 25 },
-];
+import { useState, useEffect } from "react";
+import jsondata from '../jsons/test.json';
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+
+const data1 = Object.entries(jsondata.systemsCountPerCriticalAndConsistency).map(([name, value]) => ({
+  name,
+  value,
+}));
+const data2 = Object.entries(jsondata.systemCountPerType).map(([name, value]) => ({  name, value }));
+const data3 = Object.entries(jsondata.systemCountPerSubType).map(([name, value]) => ({  name, value }));
+
+console.log(data1);
 
 const renderPieChart = (data) => (
   <PieChart width={400} height={400}>

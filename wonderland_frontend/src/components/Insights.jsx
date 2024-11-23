@@ -2,13 +2,14 @@ import { ReactComponent as InfectedIcon } from '../icons/infected_system.svg';
 import { ReactComponent as ServicesIcon } from '../icons/services.svg';
 import { ReactComponent as NetworksIcon } from '../icons/networks.svg';
 import { ReactComponent as InsightsIcon } from '../icons/insights.svg';
+import jsondata from '../jsons/test.json';
 
 function Insights() {
     // need to retrieve the values from db later
     const data = [
-      { label: "Infected System", value: 200, icon: <InfectedIcon className="h-6 w-6 text-red-500" /> },
-      { label: "Services", value: 20, icon: <ServicesIcon className="h-6 w-6 text-blue-500" />  },
-      { label: "Networks", value: 34, icon: <NetworksIcon className="h-6 w-6 text-green-500" /> },
+      { label: "Infected System", value: jsondata.affectedSystemsCount, icon: <InfectedIcon className="h-6 w-6 text-red-500" /> },
+      { label: "Services", value: jsondata.affectedServicesCount, icon: <ServicesIcon className="h-6 w-6 text-blue-500" />  },
+      { label: "Networks", value: jsondata.affectedNetworksCount, icon: <NetworksIcon className="h-6 w-6 text-green-500" /> },
     ];
   
     return (
