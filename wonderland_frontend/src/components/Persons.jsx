@@ -3,8 +3,12 @@ import { ReactComponent as OtherIcon } from '../icons/other.svg';
 import { ReactComponent as PeopleIcon } from '../icons/people.svg';
 import { ReactComponent as HouseIcon } from '../icons/house.svg';
 import { Fragment, React } from 'react';
+import { isEmpty } from "../helper"
 
-function Persons(jsondata) {
+function Persons({ jsondata }) {
+    if(isEmpty(jsondata))
+      return <></>;
+    
     const data = [
       { label: "IT Responsibles\nIT Admins & Security Coordinator", value: jsondata.directAffectedITResponsibles },
       { label: "Users", value: jsondata.directAffectedUsers },

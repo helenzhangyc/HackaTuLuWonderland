@@ -7,7 +7,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<NeoClient>();
 
+builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: "AllowedCorsOrigins",
+                builder =>
+                {
+                    builder
+                        .SetIsOriginAllowed(_ => true)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+        });
+
 var app = builder.Build();
+
+app.UseCors("AllowedCorsOrigins");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -48,8 +63,3 @@ app.MapGet("/dashboard-stats", async (NeoClient client) =>
 .WithName("Dashboard Stats");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

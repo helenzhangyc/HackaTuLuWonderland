@@ -42,7 +42,7 @@ function App() {
 function Dashboard() {
   const navigate = useNavigate();
 
-  const [jsondata, setJsonData] = useState(null);
+  const [jsondata, setJsonData] = useState({});
 
   useEffect(() => {
     // Fetch the data from the API endpoint
@@ -63,7 +63,7 @@ function Dashboard() {
 
 
   return (
-    <div>
+    <div className="container mx-auto">
       <div className="flex justify-between items-center">
         <h2 className="text-4xl font-extrabold dark:text-white">Dashboard</h2>
         <div className="flex space-x-4">

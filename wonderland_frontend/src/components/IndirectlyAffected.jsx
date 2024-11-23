@@ -1,12 +1,24 @@
-import { PieChart, Pie, Cell, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { ReactComponent as HouseIcon } from '../icons/house.svg';
-
+import { isEmpty } from "../helper"
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
+const RADIAN = Math.PI / 180;
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, value }) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
+      return (
+          <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+              {/* {`${(percent * 100).toFixed(0)}%`} */}
+              {value}
+          </text>
+      );
+  };
 
 const renderPieChart = (data) => (
-  <PieChart width={400} height={400}>
+  <PieChart width={400} height={460} className="mb-20">
     <Pie
       data={data}
       cx={200}
@@ -14,7 +26,9 @@ const renderPieChart = (data) => (
       innerRadius={70}
       outerRadius={120}
       fill="#8884d8"
-      paddingAngle={5}
+      paddingAngle={0}
+      labelLine={false}
+      label={renderCustomizedLabel}
       dataKey="value"
     >
       {data.map((entry, index) => (
@@ -22,11 +36,15 @@ const renderPieChart = (data) => (
       ))}
     </Pie>
     <Tooltip />
+    <Legend layout="vertical" verticalAlign="bottom" align="bottom"  />
+
   </PieChart>
 );
 
+const IndirectlyAffected = ({jsondata}) => {
+  if(isEmpty(jsondata))
+    return <></>;
 
-const IndirectlyAffected = (jsondata) => {
   const directlyAffectedSystemTypes = Object.entries(jsondata.directSystemCountPerType).map(([name, value]) => ({
     name,
     value,

@@ -3,10 +3,14 @@ import { ReactComponent as ServicesIcon } from '../icons/services.svg';
 import { ReactComponent as NetworksIcon } from '../icons/networks.svg';
 import { ReactComponent as InsightsIcon } from '../icons/insights.svg';
 import { ReactComponent as ApplicationsIcon } from '../icons/applications.svg';
+import { useEffect, useState } from 'react';
+import { isEmpty } from '../helper';
 
-function Insights(jsondata) {
+function Insights({ jsondata }) {
 
-    // need to retrieve the values from db later
+    if(isEmpty(jsondata))
+      return <></>
+
     const data = [
       {label: "System with Vulnerability", value: jsondata.directAffectedSystemsCount, icon: <InfectedIcon className="h-6 w-6 text-red-500" />},
       { label: "Directly Affected Applications", value: jsondata.directAffectedApplicationsCount, icon: <ApplicationsIcon className="h-6 w-6 text-red-500" /> },
