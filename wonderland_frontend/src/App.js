@@ -63,56 +63,33 @@ function Dashboard() {
 
 
   return (
-    <div className="container mx-auto">
-      <div className="flex justify-between items-center">
-        <h2 className="text-4xl font-extrabold dark:text-white">Dashboard</h2>
-        <div className="flex space-x-4">
-          <button
-            onClick={() => navigate("/data-visualizations")}
-            className="px-4 py-2 bg-indigo-500 text-white rounded shadow hover:bg-indigo-600"
-          >
-            Data Visualization
-          </button>
-          <button
-            onClick={() => navigate("/suggested-solution")}
-            className="px-4 py-2 bg-teal-500 text-white rounded shadow hover:bg-teal-600"
-          >
-            Suggested Solution
-          </button>
-        </div>
+    <div className="flex items-center justify-center min-h-screen ">
+      <div className="w-full max-w-4xl p-8">
+        <div className="container mx-auto">
+          <div className="flex justify-between items-center">
+            <div className="flex space-x-4" style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <button style={{ display: 'flex', justifyContent: 'flex-end' }}
+                onClick={() => navigate("/")}
+                className="px-4 py-2 bg-indigo-500 text-white rounded shadow hover:bg-indigo-600"
+              >
+                Data Visualization
+              </button>
+              <button style={{ display: 'flex', justifyContent: 'flex-end' }}
+                onClick={() => navigate("/suggested-solution")}
+                className="px-4 py-2 bg-teal-500 text-white rounded shadow hover:bg-teal-600"
+              >
+                Suggested Solution
+              </button>
+            </div>
+          </div>
+          <br />
+          {/* <Filters /> */}
+          <Insights jsondata={jsondata} />
+          <CoolDiagrams jsondata={jsondata} />
+          <Persons jsondata={jsondata} />
+          <IndirectlyAffected jsondata={jsondata} />
+        </div >
       </div>
-      <div className="flex justify-between space-x-4 mt-8">
-        <button
-          onClick={() => navigate("/services")}
-          className="flex-1 p-4 bg-blue-500 text-white rounded shadow hover:bg-blue-600"
-        >
-          Services
-        </button>
-        <button
-          onClick={() => navigate("/it-contact-people")}
-          className="flex-1 p-4 bg-green-500 text-white rounded shadow hover:bg-green-600"
-        >
-          IT Contact People
-        </button>
-        <button
-          onClick={() => navigate("/organization-units")}
-          className="flex-1 p-4 bg-purple-500 text-white rounded shadow hover:bg-purple-600"
-        >
-          Organization Units
-        </button>
-        <button
-          onClick={() => navigate("/systems")}
-          className="flex-1 p-4 bg-red-500 text-white rounded shadow hover:bg-red-600"
-        >
-          Systems
-        </button>
-      </div>
-      <br />
-      {/* <Filters /> */}
-      <Insights jsondata={jsondata} />
-      <CoolDiagrams jsondata={jsondata} />
-      <Persons jsondata={jsondata} />
-      <IndirectlyAffected jsondata={jsondata} />
     </div>
   );
 }

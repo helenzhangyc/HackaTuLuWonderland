@@ -22,7 +22,7 @@ function Persons({ jsondata }) {
     ];
   
     return (
-      <div>
+      <div className='mt-20'>
         <div className="flex items-center space-x-2">
   <PersonsIcon className="h-6 w-6 text-gray-500" />
   <div><b>Persons</b></div>

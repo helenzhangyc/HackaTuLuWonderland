@@ -20,13 +20,13 @@ const RADIAN = Math.PI / 180;
   };
 
 const renderPieChart = (data) => (
-  <PieChart width={400} height={460} className="mb-20">
+  <PieChart width={200} height={350} className="mb-20">
     <Pie
       data={data}
-      cx={200}
-      cy={200}
-      innerRadius={70}
-      outerRadius={120}
+      cx={100}
+      cy={100}
+      innerRadius={50}
+      outerRadius={80}
       fill="#8884d8"
       paddingAngle={0}
       labelLine={false}
@@ -55,32 +55,31 @@ const CoolDiagrams = ({jsondata}) => {
   const data2 = Object.entries(jsondata.systemCountPerType).map(([name, value]) => ({  name, value }));
   const data3 = Object.entries(jsondata.systemCountPerNetworkStatus).map(([name, value]) => ({  name, value }));
 
+  const chartWidth = 200;
+
   return (
-    <div className="flex flex-col items-center justify-center">
+    // <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center">
+      <div className="container mx-auto">
       <div className="flex items-center space-x-2 self-start">
         <CoolDiagramsIcon className="h-6 w-6 text-gray-500" />
-        <b>Cool Diagrams</b>
+        <b>Diagrams</b>
       </div>
-      <div className="flex space-x-4">
+      <div className="flex justify-between space-x-4 mt-8 max-w-3xl mx-auto">
         <div className="flex flex-col items-center">
-          <div className="flex">
-            {renderPieChart(data1)}
-          </div>
-          <p style={{ marginTop: '-30px', fontSize: '20px' }}>Critical</p>
+          {renderPieChart(data1, chartWidth)}
+          <p className="mt-[-20px] text-lg">Critical</p>
         </div>
         <div className="flex flex-col items-center">
-          <div className="flex">
-            {renderPieChart(data2)}
-          </div>
-          <p style={{ marginTop: '-30px', fontSize: '20px' }}>Type</p>
+          {renderPieChart(data2, chartWidth)}
+          <p className="mt-[-20px] text-lg">Type</p>
         </div>
         <div className="flex flex-col items-center">
-          <div className="flex">
-            {renderPieChart(data3)}
-          </div>
-          <p style={{ marginTop: '-30px', fontSize: '20px' }}>Network Status</p>
+          {renderPieChart(data3, chartWidth)}
+          <p className="mt-[-20px] text-lg">Network Status</p>
         </div>
       </div>
+    </div>
     </div>
   );
 };
