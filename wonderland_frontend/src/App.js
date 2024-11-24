@@ -14,6 +14,24 @@ import { useEffect, useState } from "react";
 
 function App() {
 
+  const [jsondata, setJsonData] = useState({});
+
+  useEffect(() => {
+    // Fetch the data from the API endpoint
+    fetch(process.env.REACT_APP_BACKEND_URL + 'dashboard-stats')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setJsonData(data); // Set the fetched data to state
+      })
+      .catch((error) => {
+        console.error('Error fetching the JSON data:', error);
+      });
+  }, []);
 
   return (
     <Router>
@@ -30,7 +48,7 @@ function App() {
             element={<WithBackButton component={OrganizationUnits} />}
           />
           <Route path="/systems" element={<WithBackButton component={Systems} />} />
-          <Route path="/suggested-solution" element={<SuggestedSolution />} />
+          <Route path="/suggested-solution" element={<SuggestedSolution jsondata={jsondata} />} />
           <Route path="/data-visualizations" element={<DataVisualizations />} />
         </Routes>
       </div>
