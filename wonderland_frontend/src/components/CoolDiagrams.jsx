@@ -59,7 +59,7 @@ const CoolDiagrams = ({jsondata}) => {
     <div className="flex flex-col items-center justify-center">
       <div className="flex items-center space-x-2 self-start">
         <CoolDiagramsIcon className="h-6 w-6 text-gray-500" />
-        <b>Cool Diagrams</b>
+        <b>Diagrams</b>
       </div>
       <div className="flex space-x-4">
         <div className="flex flex-col items-center">
