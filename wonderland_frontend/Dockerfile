@@ -3,5 +3,5 @@ WORKDIR /app
 COPY public/ ./public
 COPY src/ ./src
 COPY package.json .
-RUN npm install
+RUN npm install --loglevel verbose
 CMD ["npm", "start"]
