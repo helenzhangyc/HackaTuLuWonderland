@@ -18,7 +18,7 @@ function App() {
 
   useEffect(() => {
     // Fetch the data from the API endpoint
-    fetch(process.env.REACT_APP_BACKEND_URL + 'dashboard-stats')
+    fetch('https://api.hackatuluwonderland.de/dashboard-stats')
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
