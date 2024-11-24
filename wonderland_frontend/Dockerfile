@@ -7,4 +7,5 @@ COPY package.json .
 RUN npm install --loglevel verbose
 RUN npm install -g serve
 RUN npm run build 
+RUN npx tailwindcss -i ./src/index.css -o ./build/tailwind.css
 CMD ["serve", "-s", "build"]
