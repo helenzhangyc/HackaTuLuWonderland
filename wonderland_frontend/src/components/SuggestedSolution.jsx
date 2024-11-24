@@ -5,7 +5,9 @@ function SuggestedSolution() {
     const navigate = useNavigate();
   
     return (
-      <div>
+      <div className="flex items-center justify-center">
+      <div className="w-full max-w-4xl p-8">
+      <div className="container mx-auto">
         <div className="flex space-x-4">
           <button style={{ display: 'flex', justifyContent: 'flex-end' }}
             onClick={() => navigate("/")}
@@ -23,6 +25,8 @@ function SuggestedSolution() {
         <br/>
         <h2 className="text-3xl font-bold text-gray-800">Suggested Solution</h2>
         <p className="mt-4 text-gray-600">This page will contain suggested solutions or recommendations.</p>
+      </div>
+      </div>
       </div>
     );
   }
