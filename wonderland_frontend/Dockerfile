@@ -1,5 +1,6 @@
 FROM node:18-alpine
 WORKDIR /app
+COPY .env/ ./env
 COPY public/ ./public
 COPY src/ ./src
 COPY package.json .
