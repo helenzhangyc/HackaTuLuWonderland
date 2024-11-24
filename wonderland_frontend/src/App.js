@@ -46,7 +46,7 @@ function Dashboard() {
 
   useEffect(() => {
     // Fetch the data from the API endpoint
-    fetch('http://localhost:5033/dashboard-stats')
+    fetch(process.env.REACT_APP_BACKEND_URL + 'dashboard-stats')
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
