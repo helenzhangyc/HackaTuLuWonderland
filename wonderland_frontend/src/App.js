@@ -14,12 +14,11 @@ import { useEffect, useState } from "react";
 import './App.css'
 
 function App() {
-
-  const [jsondata, setJsonData] = useState({});
+  const [recommendedStepsData, setRecommendedStepsData] = useState({});
 
   useEffect(() => {
     // Fetch the data from the API endpoint
-    fetch('https://api.hackatuluwonderland.de/dashboard-stats')
+    fetch('https://api.hackatuluwonderland.de/recommended-steps')
       .then((response) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -27,7 +26,7 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        setJsonData(data); // Set the fetched data to state
+        setRecommendedStepsData(data); // Set the fetched data to state
       })
       .catch((error) => {
         console.error('Error fetching the JSON data:', error);
@@ -49,7 +48,7 @@ function App() {
             element={<WithBackButton component={OrganizationUnits} />}
           />
           <Route path="/systems" element={<WithBackButton component={Systems} />} />
-          <Route path="/suggested-solution" element={<SuggestedSolution jsondata={jsondata} />} />
+          <Route path="/suggested-solution" element={<SuggestedSolution jsondata={recommendedStepsData} />} />
           <Route path="/data-visualizations" element={<DataVisualizations />} />
         </Routes>
       </div>
