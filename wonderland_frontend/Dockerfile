@@ -4,5 +4,5 @@ COPY public/ ./public
 COPY src/ ./src
 COPY node_modules/ ./node_modules
 COPY package.json .
-RUN npm install
+# RUN npm install
 CMD ["npm", "start"]
