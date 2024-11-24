@@ -11,6 +11,7 @@ import SuggestedSolution from "./components/SuggestedSolution";
 import DataVisualizations from "./components/DataVisualizations";
 import IndirectlyAffected from "./components/IndirectlyAffected";
 import { useEffect, useState } from "react";
+import './App.css'
 
 function App() {
 
