@@ -10,25 +10,17 @@ builder.Services.AddOpenApi();
 builder.Services.AddSingleton<NeoClient>();
 builder.Services.AddSingleton<CachedData>();
 builder.Services.AddSingleton<DashboardApp>();
+builder.Services.AddSingleton<ReccomendationAppp>();
 
 builder.Services.AddHostedService<MyBackgroundWorker>();
 
-builder.Services.AddCors(options =>
-        {
-            options.AddPolicy(name: "AllowedCorsOrigins",
-                builder =>
-                {
-                    builder
-                        .SetIsOriginAllowed(_ => true)
-                        .AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials();
-                });
-        });
-
 var app = builder.Build();
 
-app.UseCors("AllowedCorsOrigins");
+app.UseCors(builder => builder
+       .AllowAnyHeader()
+       .AllowAnyMethod()
+       .AllowAnyOrigin()
+    );
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -41,5 +33,11 @@ app.MapGet("/dashboard-stats", async (CachedData cachedData) =>
     return cachedData.DashboardStats;
 })
 .WithName("Dashboard Stats");
+
+app.MapGet("/recommended-steps", async (CachedData cachedData) =>
+{
+    return cachedData.RecommendedSteps;
+})
+.WithName("Recommended Steps");
 
 app.Run();

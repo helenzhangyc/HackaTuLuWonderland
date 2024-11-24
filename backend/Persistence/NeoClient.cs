@@ -567,5 +567,148 @@ public class NeoClient {
                 return count;
             });
     }
+
+
+
+
+    public async Task<int> GetIndirectDirectSystemsWhichAreInconsistentOrTypeUnknownCount(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"match (sys) - [:related_ipaddress] - (ip:IPAddress) - [:in_segment] - (VNS:VirtualNetworkSegment)
+                match (indirectSys:System) - [:related_ipaddress] - (ip) - [:in_segment] - (VNS)
+                where sys <> indirectSys
+                    and (indirectSys.type = ""Unknown"" or indirectSys.state = ""Inconsistent"")
+                return count(DISTINCT indirectSys)");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
+
+    public async Task<Dictionary<string, int>> GetIndirectAffectedSystemsCriticalCount(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"match (sys) - [:related_ipaddress] - (ip:IPAddress) - [:in_segment] - (VNS:VirtualNetworkSegment)
+                match (indirectSys:System) - [:related_ipaddress] - (ip) - [:in_segment] - (VNS)
+                where sys <> indirectSys
+                    and indirectSys.critical = 1
+                return indirectSys.type, count(DISTINCT indirectSys)");
+
+                var dict = new Dictionary<string, int>();
+
+                var record = await result.ToListAsync();
+
+                dict = record.Select(entry => KeyValuePair.Create(entry[0].As<string>(), entry[1].As<int>())).ToDictionary();
+                return dict;
+            });
+    }
+    
+    public async Task<Dictionary<string, int>> GetIndirectAffectedSystemsUnCriticalCount(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"match (sys) - [:related_ipaddress] - (ip:IPAddress) - [:in_segment] - (VNS:VirtualNetworkSegment)
+                match (indirectSys:System) - [:related_ipaddress] - (ip) - [:in_segment] - (VNS)
+                where sys <> indirectSys
+                    and indirectSys.critical = 0
+                return indirectSys.type,  count(DISTINCT indirectSys)");
+
+                var dict = new Dictionary<string, int>();
+
+                var record = await result.ToListAsync();
+
+                dict = record.Select(entry => KeyValuePair.Create(entry[0].As<string>(), entry[1].As<int>())).ToDictionary();
+                return dict;
+            });
+    }
+    
+    public async Task<Dictionary<string, int>> GetDirectSystemsCriticalCount(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"and sys.critical = 1
+                return sys.type, count(DISTINCT sys)");
+
+                  var dict = new Dictionary<string, int>();
+
+                var record = await result.ToListAsync();
+
+                dict = record.Select(entry => KeyValuePair.Create(entry[0].As<string>(), entry[1].As<int>())).ToDictionary();
+                return dict;
+            });
+    }
+    
+    public async Task<Dictionary<string, int>> GetDirectSystemsUnCriticalCount(){
+        await using var session = _driver.AsyncSession();
+
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"and sys.critical = 0
+                return sys.type, count(DISTINCT sys)");
+
+                   var dict = new Dictionary<string, int>();
+
+                var record = await result.ToListAsync();
+
+                dict = record.Select(entry => KeyValuePair.Create(entry[0].As<string>(), entry[1].As<int>())).ToDictionary();
+                return dict;
+            });
+    }
+
+    public async Task<int> GetDirectSystemsWhichAreOfflineCount(){
+        await using var session = _driver.AsyncSession();
+        return await session.ExecuteWriteAsync(
+            async tx =>
+            {
+                var result = await tx.RunAsync(
+                @"MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE" + docker_filter +
+                @"WITH COLLECT(DISTINCT sys) AS allSystems
+
+                // Second query: Systems matching software criteria and having related IP addresses
+                MATCH (sys:System)-[:related_software]-(si:SoftwareInstallation)
+                WHERE " + docker_filter +
+                @"MATCH (sys)-[:related_ipaddress]-(ip:IPAddress)
+                WITH allSystems, COLLECT(DISTINCT sys) AS systemsWithIP
+
+                // Compute relative complement: Systems without related IPs
+                WITH [sys IN allSystems WHERE NOT sys IN systemsWithIP] AS complementSystems
+                UNWIND complementSystems AS sys
+                RETURN COUNT(DISTINCT sys)");
+
+                var record = await result.SingleAsync();
+                var count = record[0].As<int>();
+
+                return count;
+            });
+    }
     
 }

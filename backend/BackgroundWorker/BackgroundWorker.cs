@@ -8,14 +8,17 @@ public class MyBackgroundWorker : BackgroundService
     private readonly ILogger<MyBackgroundWorker> _logger;
 
     private readonly DashboardApp _dashboardApp;
+    private readonly ReccomendationAppp _reccomendationAppp;
 
     public MyBackgroundWorker(IServiceScopeFactory scopeFactory, 
         ILogger<MyBackgroundWorker> logger,
-        DashboardApp dashboardApp)
+        DashboardApp dashboardApp,
+        ReccomendationAppp reccomendationAppp)
     {
         _scopeFactory = scopeFactory;
         _logger = logger;
         _dashboardApp = dashboardApp;
+        _reccomendationAppp = reccomendationAppp;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -43,6 +46,7 @@ public class MyBackgroundWorker : BackgroundService
             {
                 _logger.LogInformation("Retrieved Data");
                 await _dashboardApp.Execute();
+                await _reccomendationAppp.Execute();
                 await Task.Delay(60_000, stoppingToken);
             }
             catch (Exception ex)
