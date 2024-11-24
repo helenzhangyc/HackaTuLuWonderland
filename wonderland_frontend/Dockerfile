@@ -5,5 +5,5 @@ COPY src/ ./src
 COPY package.json .
 RUN npm install --loglevel verbose
 RUN npm install -g serve
-RUN npm build 
+RUN npm run build 
 CMD ["serve", "-s", "build"]
