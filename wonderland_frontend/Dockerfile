@@ -1,6 +1,7 @@
 FROM node:22-alpine
-COPY public/ /react-docker-example/public
-COPY src/ /react-docker-example/src
-COPY package.json /react-docker-example/
+WORKDIR /app
+COPY public/ ./public
+COPY src/ ./src
+COPY package.json .
 RUN npm install
 CMD ["npm", "start"]
