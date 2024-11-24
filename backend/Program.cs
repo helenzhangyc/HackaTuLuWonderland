@@ -14,13 +14,22 @@ builder.Services.AddSingleton<ReccomendationAppp>();
 
 builder.Services.AddHostedService<MyBackgroundWorker>();
 
+builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: "AllowedCorsOrigins",
+                builder =>
+                {
+                    builder
+                        .SetIsOriginAllowed(_ => true)
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+        });
+
 var app = builder.Build();
 
-app.UseCors(builder => builder
-       .AllowAnyHeader()
-       .AllowAnyMethod()
-       .AllowAnyOrigin()
-    );
+app.UseCors("AllowedCorsOrigins");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
