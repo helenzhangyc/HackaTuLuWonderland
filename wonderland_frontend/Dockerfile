@@ -4,4 +4,6 @@ COPY public/ ./public
 COPY src/ ./src
 COPY package.json .
 RUN npm install --loglevel verbose
-CMD ["npm", "start"]
+RUN npm install -g serve
+RUN npm build 
+CMD ["serve", "-s", "build"]
